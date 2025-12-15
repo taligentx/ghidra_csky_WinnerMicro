@@ -8,7 +8,7 @@ This fork builds on the [original extension](https://github.com/leommxj/ghidra_c
   * DWARF register mappings - potential for using Ghidra's debugger/emulator
   * Instruction bugfixes and updates
 
-Example: With this module, Ghidra can now fully disassemble, decompile, and patch firmware for the [Zeeweii DSO3D12 oscilloscope](https://github.com/taligentx/ZeeTweak). Thanks to [@leommxj](https://github.com/leommxj) for the extensive work on the original extension, this is variant would not be possible otherwise.
+Example: With this module, Ghidra can now fully disassemble, decompile, and patch firmware for the [Zeeweii DSO3D12 oscilloscope](https://github.com/taligentx/ZeeTweak). Thanks to [@leommxj](https://github.com/leommxj) for the extensive work on the original extension, this variant would not be possible otherwise.
 
 ## Files
   * `C-SKY` - extension files that can be compiled using gradle. For normal usage, install the .zip from [Releases](https://github.com/taligentx/ghidra_csky_WinnerMicro/releases).
@@ -28,17 +28,17 @@ Example: With this module, Ghidra can now fully disassemble, decompile, and patc
 
 ## Getting Started
 1. Download the extension .zip file: [Releases](https://github.com/taligentx/ghidra_csky_WinnerMicro/releases)
-  * Note that Ghidra extensions are built for specific Ghidra versions: https://github.com/NationalSecurityAgency/ghidra/releases
+    * Note that Ghidra extensions are built for specific Ghidra versions: https://github.com/NationalSecurityAgency/ghidra/releases
 2. Start Ghidra > File > Install Extensions > Top right `+` icon > select the extension .zip file.
-  * To update the extension, remove the existing extension, restart Ghidra, and install the updated extension.
+    * To update the extension, remove the existing extension, restart Ghidra, and install the updated extension.
 3. After restarting Ghidra, add the target binary: File > Import File
-4. Set Language: C-SKY v2
+4. Set Language: `C-SKY v2`
 5. Select Options > Set base address - this is the memory address where the executable code starts.
-  * For example, the W806 runtime starts at `0x08010400` by default.
-6. Double-click the imported file to launch CodeBrowser and when prompted to analyze, select "No".
-7. Select Window > Memory Map and set permissions for the executable code portion of the binary to "RX" (disable write).
-  * If you know that part of the binary is read-only data (embedded data, strings, images, etc), split that region and mark it as "R" (disable write and execute). Ghidra uses these parameters to detect code vs data.
-8. Select Analysis > Auto Analyze. De-select "Non-Returning Functions - Discovered" to avoid spurious control flow issues.
+    * For example, the W806 runtime starts at `0x08010400` by default.
+6. Double-click the imported file to launch CodeBrowser and when prompted to analyze, select `No`.
+7. Select Window > Memory Map and set permissions for the executable code portion of the binary to `RX` (disable write).
+    * If you know that part of the binary is read-only data (embedded data, strings, images, etc), split that region and mark it as `R` (disable write and execute). Ghidra uses these parameters to detect code vs data.
+8. Select Analysis > Auto Analyze. De-select `Non-Returning Functions - Discovered` to avoid spurious control flow issues.
 9. Done! At this point, you should have a listing with at least some disassembled instructions, and then the fun starts!
 
 ## Release Notes
