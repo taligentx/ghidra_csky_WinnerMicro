@@ -1,0 +1,32 @@
+with : i32_op = 0b0000 {
+    :mtcr i32_r_rx, "cr"^<i32_c_crz, i32_c_sel> is i32_r_sop = 0b011001 & i32_r_pcode = 0b00001 & i32_r_rx & i32_c_crz & i32_c_sel {
+        i32_c_crz = i32_r_rx;
+    }
+
+    :mfcr i32_r_rz, "cr"^<i32_c_crx, i32_c_sel> is i32_r_sop = 0b011000 & i32_r_pcode = 0b00001 & i32_r_rz & i32_c_crx & i32_c_sel {
+        i32_c_rz = i32_c_crx;
+    }
+    :psrclr disp_af^disp_fe^disp_ie^disp_ee is i32_r_sop = 0b011100 & i32_r_pcode = 0b00001 & i32_r_imm5 & disp_af & disp_fe & disp_ie & disp_ee {
+        local mask:4 = (((i32_r_imm5 >> 1) & 1) << 4)  |
+                       (((i32_r_imm5 >> 2) & 1) << 6)  |
+                       (((i32_r_imm5 >> 3) & 1) << 8);
+        psr = psr & ~mask;
+    }
+    :psrset disp_af^disp_fe^disp_ie^disp_ee is i32_r_sop = 0b011101 & i32_r_pcode = 0b00001 & i32_r_imm5 & disp_af & disp_fe & disp_ie & disp_ee {
+        local mask:4 = (((i32_r_imm5 >> 1) & 1) << 4)  |
+                       (((i32_r_imm5 >> 2) & 1) << 6)  |
+                       (((i32_r_imm5 >> 3) & 1) << 8);
+        psr = psr | mask;
+    }
+    :rte is i32_r_sop = 0b010000 & i32_r_pcode = 0b00001 & i32_r_rz = 0b00000 & i32_r_rx = 0b00000 & i32_r_ry = 0b00000 {
+        psr = epsr;
+        pc = epc;
+        return[pc];
+    }
+
+    :sync i32_imm5_ry is i32_imm5_ry & i32_imm5_rx = 0b00000 & i32_bit_0015 = 0b0000010000100000 {stub();}
+    :wait is i32_bit_1625 = 0b0000000000 & i32_bit_0015 = 0b0100110000100000 {stub();}
+    :doze is i32_bit_1625 = 0b0000000000 & i32_bit_0015 = 0b0101000000100000 {stub();}
+    :stop is i32_bit_1625 = 0b0000000000 & i32_bit_0015 = 0b0100100000100000 {stub();}
+}
+

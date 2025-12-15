@@ -1,0 +1,83 @@
+with : fp2_op = 0b1101 {
+    :fadds       fp2_r_vrz, fp2_r_vrx, fp2_r_vry is fp2_r_sop = 0b00000000000 & fp2_r_vrz & fp2_r_vrx & fp2_r_vry {
+        fp2_r_vrz = fp2_r_vrx f+ fp2_r_vry;
+    }
+    :fsubs       fp2_r_vrz, fp2_r_vrx, fp2_r_vry is fp2_r_sop = 0b00000000001 & fp2_r_vrz & fp2_r_vrx & fp2_r_vry {
+        fp2_r_vrz = fp2_r_vrx f- fp2_r_vry;
+    }
+    :fmuls       fp2_r_vrz, fp2_r_vrx, fp2_r_vry is fp2_r_sop = 0b00000010000 & fp2_r_vrz & fp2_r_vrx & fp2_r_vry {
+        fp2_r_vrz = fp2_r_vrx f* fp2_r_vry;
+    }
+    :fmacs       fp2_r_vrz, fp2_r_vrx, fp2_r_vry is fp2_r_sop = 0b00000010100 & fp2_r_vrz & fp2_r_vrx & fp2_r_vry {
+        fp2_r_vrz = (fp2_r_vrx f* fp2_r_vry) f+ fp2_r_vrz;
+    }
+    :fmscs       fp2_r_vrz, fp2_r_vrx, fp2_r_vry is fp2_r_sop = 0b00000010101 & fp2_r_vrz & fp2_r_vrx & fp2_r_vry {
+        fp2_r_vrz = (fp2_r_vrx f* fp2_r_vry) f- fp2_r_vrz;
+    }
+    :fdivs       fp2_r_vrz, fp2_r_vrx, fp2_r_vry is fp2_r_sop = 0b00000011000 & fp2_r_vrz & fp2_r_vrx & fp2_r_vry {
+        fp2_r_vrz = fp2_r_vrx f/ fp2_r_vry;
+    }
+
+
+    :fmovs       fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00000000100 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = fp2_r_vrx;
+    }
+    :fnegs       fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00000000111 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = f- fp2_r_vrx;
+    }
+    :fsqrts      fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00000011010 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = sqrt(fp2_r_vrx);
+    }
+
+
+    :fcmpzhss    fp2_r_vrx is fp2_r_sop = 0b00000001000 & fp2_r_vrz = 0b0000 & fp2_r_vry = 0b0000 & fp2_r_vrx {
+        psr_cf = (fp2_r_vrx f>= 0);
+    }
+
+    :fcmplts     fp2_r_vrx, fp2_r_vry is fp2_r_sop = 0b00000001101 & fp2_r_vrz = 0b0000 & fp2_r_vrx & fp2_r_vry {
+        psr_cf = (fp2_r_vrx f< fp2_r_vry);
+    }
+    :fcmpnes     fp2_r_vrx, fp2_r_vry is fp2_r_sop = 0b00000001110 & fp2_r_vrz = 0b0000 & fp2_r_vrx & fp2_r_vry {
+        psr_cf = (fp2_r_vrx f!= fp2_r_vry);
+    }
+    :fcmpuos     fp2_r_vrx, fp2_r_vry is fp2_r_sop = 0b00000001111 & fp2_r_vrz = 0b0000 & fp2_r_vrx & fp2_r_vry {
+        psr_cf = nan(fp2_r_vrx) || nan(fp2_r_vry);
+    }
+
+
+    :fstosi.rn   fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011000000 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = trunc(round(fp2_r_vrx));
+    }
+    :fstosi.rz   fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011000001 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = trunc(fp2_r_vrx);
+    }
+    :fstosi.rpi  fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011000010 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = trunc(ceil(fp2_r_vrx));
+    }
+    :fstosi.rni  fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011000011 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = trunc(floor(fp2_r_vrx));
+    }
+
+
+    :fstoui.rn   fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011000100 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = trunc(round(fp2_r_vrx));
+    }
+    :fstoui.rz   fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011000101 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = trunc(fp2_r_vrx);
+    }
+    :fstoui.rpi  fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011000110 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = trunc(ceil(fp2_r_vrx));
+    }
+    :fstoui.rni  fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011000111 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = trunc(floor(fp2_r_vrx));
+    }
+
+
+    :fsitos      fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011010000 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        fp2_r_vrz = int2float(fp2_r_vrx);
+    }
+    :fuitos      fp2_r_vrz, fp2_r_vrx is fp2_r_sop = 0b00011010001 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_vrx {
+        local tmp:8 = zext(fp2_r_vrx);
+        fp2_r_vrz = int2float(tmp);
+    }
+}

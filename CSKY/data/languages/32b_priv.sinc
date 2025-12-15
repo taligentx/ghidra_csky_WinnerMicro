@@ -1,7 +1,0 @@
-with : i32_op = 0b0000 {
-    :mtcr i32_r_rx, <i32_c_crz, i32_c_sel> is i32_r_sop = 0b011001 & i32_r_pcode = 0b00001 & i32_r_rx & i32_c_crz & i32_c_sel {stub();}
-    :mfcr i32_r_rz, <i32_c_crx, i32_c_sel> is i32_r_sop = 0b011000 & i32_r_pcode = 0b00001 & i32_r_rz & i32_c_crx & i32_c_sel {stub();}
-    :psrclr i32_r_imm5 is i32_r_sop = 0b011100 & i32_r_pcode = 0b00001 & i32_r_imm5 {stub();}
-    :psrset i32_r_imm5 is i32_r_sop = 0b011101 & i32_r_pcode = 0b00001 & i32_r_imm5 {stub();}
-    :rte is i32_r_sop = 0b010000 & i32_r_pcode = 0b00001 & i32_r_rz = 0b00000 & i32_r_rx = 0b00000 & i32_r_ry = 0b00000 {stub();}
-}

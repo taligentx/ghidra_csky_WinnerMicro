@@ -1,0 +1,5 @@
+with : i32_op = 0b1111 {
+    :cprgr i32_r_rz, <i32_c_cpid, i32_c_imm12> is i32_c_sop = 0b0000 & i32_r_rz & i32_c_cpid & i32_c_imm12 {stub();}
+    :cprcr i32_r_rz, <i32_c_cpid, i32_c_imm12> is i32_c_sop = 0b0010 & i32_r_rz & i32_c_cpid & i32_c_imm12 {stub();}
+    :cpop <i32_c_cpid, i32_c_user0> is i32_c_sop = 0b1110 & i32_c_cpid & i32_c_user0 & i32_c_user1 {stub();}
+}

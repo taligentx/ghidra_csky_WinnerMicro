@@ -1,0 +1,27 @@
+<dwarf>
+  <register_mappings>
+    <register_mapping dwarf="0" ghidra="r0" auto_count="14"/>      <!-- r0..r13 -->
+    <register_mapping dwarf="14" ghidra="sp" stackpointer="true"/>
+    <register_mapping dwarf="15" ghidra="lr"/>
+    <register_mapping dwarf="16" ghidra="r16" auto_count="16"/>    <!-- r16..r31 -->
+    <register_mapping dwarf="36" ghidra="hi"/>
+    <register_mapping dwarf="37" ghidra="lo"/>
+    <register_mapping dwarf="74" ghidra="vr0"/>
+    <register_mapping dwarf="78" ghidra="vr1"/>
+    <register_mapping dwarf="82" ghidra="vr2"/>
+    <register_mapping dwarf="86" ghidra="vr3"/>
+    <register_mapping dwarf="90" ghidra="vr4"/>
+    <register_mapping dwarf="94" ghidra="vr5"/>
+    <register_mapping dwarf="98" ghidra="vr6"/>
+    <register_mapping dwarf="102" ghidra="vr7"/>
+    <register_mapping dwarf="106" ghidra="vr8"/>
+    <register_mapping dwarf="110" ghidra="vr9"/>
+    <register_mapping dwarf="114" ghidra="vr10"/>
+    <register_mapping dwarf="118" ghidra="vr11"/>
+    <register_mapping dwarf="122" ghidra="vr12"/>
+    <register_mapping dwarf="126" ghidra="vr13"/>
+    <register_mapping dwarf="130" ghidra="vr14"/>
+    <register_mapping dwarf="134" ghidra="vr15"/>
+    <register_mapping dwarf="72" ghidra="epc"/>
+  </register_mappings>
+</dwarf>

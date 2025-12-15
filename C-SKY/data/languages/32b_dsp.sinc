@@ -1,0 +1,263 @@
+with : i32_op = 0b1110 {
+    with : i32_r_sop = 0b100000 {
+        :mul.u32       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local result:8 = zext(i32_r_rx) * zext(i32_r_ry);
+            i32_r_rz = result:4;
+            local rz_next:4 = &i32_r_rz + 4;
+            *[register]:4 rz_next = result(4);
+        }
+        :mul.s32       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10000 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local result:8 = sext(i32_r_rx) * sext(i32_r_ry);
+            i32_r_rz = result:4;
+            local rz_next:4 = &i32_r_rz + 4;
+            *[register]:4 rz_next = result(4);
+        }
+        :mula.u32 i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00100 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local product:8 = zext(i32_r_rx) * zext(i32_r_ry);
+            local rz_next:4 = &i32_r_rz + 4;
+            local low:4 = i32_r_rz;
+            local high:4 = *[register]:4 rz_next;
+            local addition:8 = zext(high) << 32 | zext(low);
+            local result:8 = product + addition;
+            i32_r_rz = result:4;
+            *[register]:4 rz_next = result(4);
+        }
+        :mula.s32 i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10100 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local product:8 = sext(i32_r_rx) * sext(i32_r_ry);
+            local rz_next:4 = &i32_r_rz + 4;
+            local low:4 = i32_r_rz;
+            local high:4 = *[register]:4 rz_next;
+            local addition:8 = sext(high) << 32 | sext(low);
+            local result:8 = product + addition;
+            i32_r_rz = result:4;
+            *[register]:4 rz_next = result(4);
+        }
+        :muls.u32      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :muls.s32      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :mula.u32.s    i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01100 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :mula.s32.s    i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b11100 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    }
+    with : i32_r_sop = 0b100001 {
+        :pmul.u16      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00001 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pmul.s16      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00101 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :mula.32.l     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00010 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local product:8 = zext(i32_r_rx) * zext(i32_r_ry);
+            local result:8 = zext(i32_r_rz) + product;
+            i32_r_rz = result:4;
+        }
+        :prmul.s16     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01001 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :prmul.s16.h   i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b11001 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :prmul.s16.rh  i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b11101 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    }
+
+    :dexti             i32_r_rz, i32_r_rx, i32_r_ry i32_bit_0509 is i32_r_sop = 0b100110 & i32_r_rz & i32_r_rx &  i32_r_ry & i32_bit_0509 {dsp_stub();}
+    :dext              i32_r_rz, i32_r_rx, i32_r_ry i32_bit_0509 is i32_r_sop = 0b100111 & i32_r_rz & i32_r_rx &  i32_r_ry & i32_bit_0509 {dsp_stub();}
+    :pkg               i32_r_rz, i32_r_rx, i32_imm4_imm_a, i32_r_ry, i32_imm4_imm_b is i32_imm4_sop  = 0b101 & i32_r_rz & i32_r_rx & i32_r_ry & i32_imm4_imm_a & i32_imm4_imm_b {dsp_stub();}
+
+    with : i32_r_sop = 0b110000 {
+        :padd.16       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :padd.8        i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :add.64        i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00011 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local rx_next:4 = &i32_r_rx + 4;
+            local rx_low:4 = i32_r_rx;
+            local rx_high:4 = *[register]:4 rx_next;
+            local rx_result:8 = zext(rx_high) << 32 | zext(rx_low);
+
+            local ry_next:4 = &i32_r_ry + 4;
+            local ry_low:4 = i32_r_ry;
+            local ry_high:4 = *[register]:4 ry_next;
+            local ry_result:8 = zext(ry_high) << 32 | zext(ry_low);
+
+            local result:8 = rx_result + ry_result;
+            local rz_next:4 = &i32_r_rz + 4;
+            i32_r_rz = result:4;
+            *[register]:4 rz_next = result(4);
+        }
+        :padd.u16.s    i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :padd.s16.s    i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01100 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :padd.u8.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :padd.s8.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :add.u32.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01001 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :add.s32.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01101 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :paddh.u16     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :paddh.s16     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10100 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :addh.u32      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10001 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local sum:8 = zext(i32_r_rx) + zext(i32_r_ry);
+            local result:8 = sum / 2;
+            i32_r_rz = result:4;
+        }
+        :addh.s32      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10101 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local sum:8 = sext(i32_r_rx) + sext(i32_r_ry);
+            local result:8 = sum s/ 2;   
+            i32_r_rz = result:4;
+        }
+        :paddh.u8      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :paddh.s8      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    }
+
+    with : i32_r_sop = 0b110001 {
+        :psub.16       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :psub.8        i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :sub.64        i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00011 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local rx_next:4 = &i32_r_rx + 4;
+            local rx_low:4 = i32_r_rx;
+            local rx_high:4 = *[register]:4 rx_next;
+            local rx_result:8 = zext(rx_high) << 32 | zext(rx_low);
+
+            local ry_next:4 = &i32_r_ry + 4;
+            local ry_low:4 = i32_r_ry;
+            local ry_high:4 = *[register]:4 ry_next;
+            local ry_result:8 = zext(ry_high) << 32 | zext(ry_low);
+
+            local result:8 = rx_result - ry_result;
+            local rz_next:4 = &i32_r_rz + 4;
+            i32_r_rz = result:4;
+            *[register]:4 rz_next = result(4);
+        }
+        :psub.u16.s    i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :psub.s16.s    i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01100 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :psub.u8.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :psub.s8.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :sub.u32.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01001 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :sub.s32.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01101 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :psubh.u16     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :psubh.s16     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10100 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :subh.u32  i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10001 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local sum:8 = zext(i32_r_rx) - zext(i32_r_ry);
+            local result:8 = sum / 2;
+            i32_r_rz = result:4;
+        }
+        :subh.s32  i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10101 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local sum:8 = sext(i32_r_rx) - sext(i32_r_ry);
+            local result:8 = sum s/ 2;   
+            i32_r_rz = result:4;
+        }
+        :psubh.u8      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :psubh.s8      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    }
+
+    with : i32_r_sop = 0b110010 {
+        :pcmpne.16     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pcmpne.8      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pcmphs.u16    i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pcmphs.s16    i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01100 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pcmphs.u8     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pcmphs.s8     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pcmplt.u8     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pcmplt.s8     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    }
+
+    with : i32_r_sop = 0b110011 {
+        :pmax.u16      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pmax.s16      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00100 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :max.u32       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00001 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local tmp:1 = i32_r_rx < i32_r_ry;
+            i32_r_rz = (zext(tmp) * i32_r_ry) + (zext(!tmp) * i32_r_rx);
+        }
+        :max.s32       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00101 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local tmp:1 = i32_r_rx s< i32_r_ry;
+            i32_r_rz = (zext(tmp) * i32_r_ry) + (zext(!tmp) * i32_r_rx);
+        }
+        :pmax.u8       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pmax.s8       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pmin.u16      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pmin.s16      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01100 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :min.u32       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01001 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local tmp:1 = i32_r_rx < i32_r_ry;
+            i32_r_rz = (zext(tmp) * i32_r_rz) + (zext(!tmp) * i32_r_ry);
+        }
+        :min.s32       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01101 & i32_r_rz & i32_r_rx & i32_r_ry {
+            local tmp:1 = i32_r_rx s< i32_r_ry;
+            i32_r_rz = (zext(tmp) * i32_r_rz) + (zext(!tmp) * i32_r_ry);
+        }
+        :pmin.u8       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pmin.s8       i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    }
+
+    with : i32_r_sop = 0b110101 {
+        :lsl.u32.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01011 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :lsl.s32.s     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b01111 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    }
+
+    with : i32_r_sop = 0b110110 {
+        :pext.u8.e     i32_r_rz, i32_r_rx  is i32_r_pcode = 0b01000 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :pext.s8.e     i32_r_rz, i32_r_rx  is i32_r_pcode = 0b01100 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :pextx.u8.e    i32_r_rz, i32_r_rx  is i32_r_pcode = 0b01001 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :pextx.s8.e    i32_r_rz, i32_r_rx  is i32_r_pcode = 0b01101 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :pkgll         i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pkghh         i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b00011 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :narl          i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :narh          i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10001 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :narlx         i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10010 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :narhx         i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b10011 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :clipi.u32     i32_r_rz, i32_r_rx, i32_r_imm5 is i32_r_pcode = 0b11000 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :clipi.s32     i32_r_rz, i32_r_rx, i32_r_imm5 is i32_r_pcode = 0b11100 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :clip.u32      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b11001 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :clip.s32      i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b11101 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pclipi.u16    i32_r_rz, i32_r_rx, i32_r_imm5 is i32_r_pcode = 0b11010 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :pclipi.s16    i32_r_rz, i32_r_rx, i32_r_imm5 is i32_r_pcode = 0b11110 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :pclip.u16     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b11011 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+        :pclip.s16     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_pcode = 0b11111 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    }
+
+    with : i32_r_sop = 0b110111 {
+        :pabs.s8.s     i32_r_rz, i32_r_rx is i32_r_pcode = 0b00100 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :pabs.s16.s    i32_r_rz, i32_r_rx is i32_r_pcode = 0b00101 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :abs.s32.s     i32_r_rz, i32_r_rx is i32_r_pcode = 0b00110 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :pneg.s8.s     i32_r_rz, i32_r_rx is i32_r_pcode = 0b01100 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :pneg.s16.s    i32_r_rz, i32_r_rx is i32_r_pcode = 0b01101 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :neg.s32.s     i32_r_rz, i32_r_rx is i32_r_pcode = 0b01110 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :dup.8         i32_r_rz, i32_r_rx, "0" is i32_r_pcode = 0b10000 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :dup.8         i32_r_rz, i32_r_rx, "1" is i32_r_pcode = 0b10001 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :dup.16        i32_r_rz, i32_r_rx, "0" is i32_r_pcode = 0b11000 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+        :dup.16        i32_r_rz, i32_r_rx, "1" is i32_r_pcode = 0b11001 & i32_r_rz & i32_r_rx & i32_r_imm5 {dsp_stub();}
+    }
+
+    :mulaca.s8     i32_r_rz, i32_r_rx, i32_r_ry is i32_r_sop = 0b111001 & i32_r_pcode = 0b00110 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+}
+
+with : i32_op = 0b0100 {
+    :ldbi.b    i32_r_rz, (i32_r_rx) is i32_r_sop = 0b100000 & i32_r_pcode = 0b00000 & i32_r_ry = 0b00000 & i32_r_rz & i32_r_rx {
+        i32_r_rz = *:1 (i32_r_rx);
+        i32_r_rx = i32_r_rx + 1;
+    }
+    :ldbi.h    i32_r_rz, (i32_r_rx) is i32_r_sop = 0b100001 & i32_r_pcode = 0b00000 & i32_r_ry = 0b00000 & i32_r_rz & i32_r_rx {
+        i32_r_rz = *:2 (i32_r_rx);
+        i32_r_rx = i32_r_rx + 2;
+    }
+
+    :ldbi.w    i32_r_rz, (i32_r_rx) is i32_r_sop = 0b100010 & i32_r_pcode = 0b00000 & i32_r_ry = 0b00000 & i32_r_rz & i32_r_rx {
+        i32_r_rz = *:4 (i32_r_rx);
+        i32_r_rx = i32_r_rx + 4;
+    }
+
+    :pldbi.d   i32_r_rz (i32_r_rx) is i32_r_sop = 0b100011 & i32_r_pcode = 0b00000 & i32_r_ry = 0b00000 & i32_r_rz & i32_r_rx {dsp_stub();}
+    :ldbi.bs   i32_r_rz (i32_r_rx) is i32_r_sop = 0b100101 & i32_r_pcode = 0b00000 & i32_r_ry = 0b00000 & i32_r_rz & i32_r_rx {dsp_stub();}
+    :ldbi.hs   i32_r_rz (i32_r_rx) is i32_r_sop = 0b100100 & i32_r_pcode = 0b00000 & i32_r_ry = 0b00000 & i32_r_rz & i32_r_rx {dsp_stub();}
+
+    :ldbir.b   i32_r_rz (i32_r_rx) i32_r_ry is i32_r_sop = 0b101000 & i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    :ldbir.h   i32_r_rz (i32_r_rx) i32_r_ry is i32_r_sop = 0b101001 & i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    :ldbir.w   i32_r_rz (i32_r_rx) i32_r_ry is i32_r_sop = 0b101010 & i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    :pldbir.d  i32_r_rz (i32_r_rx) i32_r_ry is i32_r_sop = 0b101011 & i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    :ldbir.bs  i32_r_rz (i32_r_rx) i32_r_ry is i32_r_sop = 0b101100 & i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    :ldbir.hs  i32_r_rz (i32_r_rx) i32_r_ry is i32_r_sop = 0b101101 & i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+}
+
+with : i32_op = 0b0101 {
+    :stbi.b    i32_r_rz (i32_r_rx) is i32_r_sop = 0b100000 & i32_r_pcode = 0b00000 & i32_r_ry = 0b00000 & i32_r_rz & i32_r_rx {
+        *:1 (i32_r_rx) = i32_r_rz:1;
+        i32_r_rx = i32_r_rx + 1;
+    }
+    :stbi.h    i32_r_rz (i32_r_rx) is i32_r_sop = 0b100001 & i32_r_pcode = 0b00000 & i32_r_ry = 0b00000 & i32_r_rz & i32_r_rx {
+        *:2 (i32_r_rx) = i32_r_rz:2;
+        i32_r_rx = i32_r_rx + 2;
+    }
+    :stbi.w    i32_r_rz (i32_r_rx) is i32_r_sop = 0b100010 & i32_r_pcode = 0b00000 & i32_r_ry = 0b00000 & i32_r_rz & i32_r_rx {
+        *:4 (i32_r_rx) = i32_r_rz:4;
+        i32_r_rx = i32_r_rx + 4;
+    }
+
+    :stbir.b   i32_r_rz (i32_r_rx) i32_r_ry is i32_r_sop = 0b101000 & i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    :stbir.h   i32_r_rz (i32_r_rx) i32_r_ry is i32_r_sop = 0b101001 & i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+    :stbir.w   i32_r_rz (i32_r_rx) i32_r_ry is i32_r_sop = 0b101010 & i32_r_pcode = 0b00000 & i32_r_rz & i32_r_rx & i32_r_ry {dsp_stub();}
+}

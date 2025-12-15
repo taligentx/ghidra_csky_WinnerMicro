@@ -1,0 +1,8 @@
+with : fp2_op = 0b1101 {
+    :fmfvrl     fp2_r_rz, fp2_r_vrx is fp2_r_sop = 0b00011011001 & fp2_r_vry = 0b0000 & fp2_r_vrx & fp2_r_rz {
+        fp2_r_rz = fp2_r_vrx:4;
+    }
+    :fmtvrl     fp2_r_vrz, fp2_r_rx is fp2_r_sop = 0b00011011011 & fp2_r_vry = 0b0000 & fp2_r_vrz & fp2_r_rx {
+        fp2_r_vrz = fp2_r_rx;
+    }
+}

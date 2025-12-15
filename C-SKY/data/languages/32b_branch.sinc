@@ -1,0 +1,75 @@
+# b* jsr/rts
+with : i32_op = 0b1010 {
+    # bt
+    :bt i32_imm16_immSP_O1 is i32_imm16_sop = 0b00011 & i32_imm16_rx = 0b00000 & i32_imm16_immSP_O1 {
+        if (psr_cf) goto i32_imm16_immSP_O1;
+    }
+    # bf
+    :bf i32_imm16_immSP_O1 is i32_imm16_sop = 0b00010 & i32_imm16_rx = 0b00000 & i32_imm16_immSP_O1 {
+        if (!psr_cf) goto i32_imm16_immSP_O1;
+    }
+    # br 32 bit
+    :br i32_imm16_immSP_O1 is i32_imm16_sop = 0b00000 & i32_imm16_rx = 0b00000 & i32_imm16_immSP_O1 {
+        goto i32_imm16_immSP_O1;
+    }
+    # bez
+    :bez i32_imm16_rx, i32_imm16_immSP_O1 is i32_imm16_sop = 0b01000 & i32_imm16_rx & i32_imm16_immSP_O1 {
+        if(i32_imm16_rx == 0) goto i32_imm16_immSP_O1;
+    }
+    # bnez
+    :bnez i32_imm16_rx, i32_imm16_immSP_O1 is i32_imm16_sop = 0b01001 & i32_imm16_rx & i32_imm16_immSP_O1 {
+        if(i32_imm16_rx != 0) goto i32_imm16_immSP_O1;
+    }
+    # bnezad
+    :bnezad i32_imm16_rx, i32_imm16_immSP_O1 is i32_imm16_sop = 0b00001 & i32_imm16_rx & i32_imm16_immSP_O1 {
+        i32_imm16_rx = i32_imm16_rx - 1;
+        if(i32_imm16_rx != 0) goto i32_imm16_immSP_O1;
+    }
+    # bhz
+    :bhz i32_imm16_rx, i32_imm16_immSP_O1 is i32_imm16_sop = 0b01010 & i32_imm16_rx & i32_imm16_immSP_O1 {
+        if(i32_imm16_rx s> 0) goto i32_imm16_immSP_O1;
+    }
+    # bhsz
+    :bhsz i32_imm16_rx, i32_imm16_immSP_O1 is i32_imm16_sop = 0b01101 & i32_imm16_rx & i32_imm16_immSP_O1 {
+        if(i32_imm16_rx s>= 0) goto i32_imm16_immSP_O1;
+    }
+    # blz
+    :blz i32_imm16_rx, i32_imm16_immSP_O1 is i32_imm16_sop = 0b01100 & i32_imm16_rx & i32_imm16_immSP_O1 {
+        if(i32_imm16_rx s< 0) goto i32_imm16_immSP_O1;
+    }
+    # blsz
+    :blsz i32_imm16_rx, i32_imm16_immSP_O1 is i32_imm16_sop = 0b01011 & i32_imm16_rx & i32_imm16_immSP_O1 {
+        if(i32_imm16_rx s<= 0) goto i32_imm16_immSP_O1;
+    }
+
+    # jsr
+    :jsr i32_imm16_rx is i32_imm16_sop = 0b00111 & i32_imm16_imm = 0b0000000000000000 & i32_imm16_rx {
+        lr = inst_next;
+        local dest:4 = i32_imm16_rx & 0xfffffffe;
+        call [dest];
+    }
+    # rts is pseudo instruction of jmp32 lr
+    :rts is i32_imm16_sop = 0b00110 & i32_imm16_rx = 0b01111 & i32_imm16_imm = 0b0000000000000000 {
+        local dest:4 = lr & 0xfffffffe;
+        return [dest];
+    }
+    :jmp i32_imm16_rx is i32_imm16_sop = 0b00110 & i32_imm16_imm = 0b0000000000000000 & i32_imm16_rx {
+        local dest:4 = i32_imm16_rx & 0xfffffffe;
+        goto [dest];
+    }
+    :jmpi i32_imm16_immSP_O2 is i32_imm16_sop = 0b10110 & i32_bit_1620 = 0b00000 & i32_imm16_immSP_O2 {
+        local dest:4 = i32_imm16_immSP_O2 & 0xfffffffe;
+        goto [dest];
+    }
+    :jsri i32_imm16_immSP_O2 is i32_imm16_sop = 0b10111 & i32_bit_1620 = 0b00000 & i32_imm16_immSP_O2 {
+        lr = inst_next;
+        local dest:4 = i32_imm16_immSP_O2 & 0xfffffffe;
+        goto [dest];
+    }
+}
+
+# bsr 32 bit
+:bsr i32_j_offset is i32_optype = 0b11 & i32_op = 0b1000 & i32_j_offset {
+    lr = inst_next;
+    call i32_j_offset;
+}

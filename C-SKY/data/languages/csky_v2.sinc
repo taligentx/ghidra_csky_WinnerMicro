@@ -1,0 +1,54 @@
+define endian=little;
+define alignment=1;
+
+define space ram      type=ram_space      size=4  default;
+define space register type=register_space size=4;
+
+# General-purpose registers
+define register offset=0x00 size=4
+    [r0 r1 r2 r3 r4 r5 r6 r7 r8 r9 r10 r11 r12 r13 sp lr r16 r17 r18 r19 r20 r21 r22 r23 r24 r25 r26 r27 r28 r29 r30 r31];
+@define r14 "sp"
+
+# Accumulator registers
+define register offset=0x100 size=4 [hi lo];
+
+# Control registers
+define register offset=0x200 size=4
+    [psr vbr epsr fpsr epc fpc ss0 ss1 ss2 ss3 ss4 gcr gsr cpidr dcsr cpwr cr16 cfr ccr capr pacr prsr cr22 cr23 cr24 cr25 cr26 cr27 cr28 cr29 mpid chr];
+
+define bitrange psr_cf   = psr[0,1]    # Carry/condition flag
+                psr_fe   = psr[4,1]
+                psr_ie   = psr[6,1]    # Interrupt enable
+                psr_ic   = psr[7,1]    # Interrupt control
+                psr_ee   = psr[8,1]    # Exception enable
+                psr_mm   = psr[9,1]    # Unaligned exception mask
+                psr_bm   = psr[10,1]   # BM flag
+                psr_tp   = psr[13,1]   # TP flag
+                psr_tm   = psr[14,2]   # Tracking mode (2 bits)
+                psr_vec  = psr[16,8]   # Anomaly vector value (8 bits)
+                psr_cpid = psr[24,4]   # CPID (4 bits)
+                psr_s    = psr[31,1];  # Supervisor mode flag
+
+# Alternative registers
+define register offset=0x300 size=4
+    [r0a r1a r2a r3a r4a r5a r6a r7a r8a r9a r10a r11a r12a r13a r14a r15a r14_spv];
+@define sp_spv "r14_spv"
+
+# Floating point v1 registers
+define register offset=0x400 size=4
+    [vr0 vr1 vr2 vr3 vr4 vr5 vr6 vr7 vr8 vr9 vr10 vr11 vr12 vr13 vr14 vr15];
+
+# Program Counter
+define register offset=0x2000 size=4 [pc];
+
+define pcodeop stub;
+define pcodeop dsp_stub;
+
+macro push(x){
+    sp = sp - 4;
+    *:4 sp = x;
+}
+macro pop(x){
+    x = *:4 sp;
+    sp = sp + 4;
+}

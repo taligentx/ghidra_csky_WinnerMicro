@@ -1,0 +1,115 @@
+# immediate operand offset access Part
+# ld.b
+:ld.b i16_imm5_rz, (i16_imm5_rx, i16_imm5_imm) is i16_optype = 0b10 & i16_3op = 0b000 & i16_imm5_rx & i16_imm5_rz & i16_imm5_imm {
+    i16_imm5_rz = zext(*:1 (i16_imm5_rx+i16_imm5_imm));
+}
+# ld.h
+:ld.h i16_imm5_rz, (i16_imm5_rx, disp) is i16_optype = 0b10 & i16_3op = 0b001 & i16_imm5_rx & i16_imm5_rz & i16_imm5_imm [disp = (i16_imm5_imm<<1);] {
+    i16_imm5_rz = zext(*:2 (i16_imm5_rx+disp));
+}
+# ld.w
+:ld.w i16_imm5_rz, (i16_imm5_rx, disp) is i16_optype = 0b10 & i16_3op = 0b010 & i16_imm5_rx & i16_imm5_rz & i16_imm5_imm [disp = (i16_imm5_imm<<2);] {
+    i16_imm5_rz = *:4 (i16_imm5_rx+disp);
+}
+# ld.w (sp)
+:ld.w i16_imm5_rz, (sp, disp) is i16_optype = 0b10 & i16_3op = 0b011 & i16_imm5_imm3 & i16_imm5_rz & i16_imm5_imm & sp [disp = (((i16_imm5_imm3<<5)+i16_imm5_imm)<<2);] {
+    i16_imm5_rz = *:4 (sp+disp);
+}
+# st.b
+:st.b i16_imm5_rz, (i16_imm5_rx, i16_imm5_imm) is i16_optype = 0b10 & i16_3op = 0b100 & i16_imm5_rx & i16_imm5_rz & i16_imm5_imm {
+    *:1 (i16_imm5_rx+i16_imm5_imm) = i16_imm5_rz:1;
+}
+# st.h
+:st.h i16_imm5_rz, (i16_imm5_rx, disp) is i16_optype = 0b10 & i16_3op = 0b101 & i16_imm5_rx & i16_imm5_rz & i16_imm5_imm [disp = (i16_imm5_imm<<1);] {
+    *:2 (i16_imm5_rx+disp) = i16_imm5_rz:2;
+}
+# st.w
+:st.w i16_imm5_rz, (i16_imm5_rx, disp) is i16_optype = 0b10 & i16_3op = 0b110 & i16_imm5_rx & i16_imm5_rz & i16_imm5_imm [disp = (i16_imm5_imm<<2);] {
+    *:4 (i16_imm5_rx+disp) = i16_imm5_rz:4;
+}
+# st.w (sp)
+:st.w i16_imm5_rz, (sp, disp) is i16_optype = 0b10 & i16_3op = 0b111 & i16_imm5_imm3 & i16_imm5_rz & i16_imm5_imm & sp [disp = (((i16_imm5_imm3<<5)+i16_imm5_imm)<<2);] {
+    *:4 (sp+disp) = i16_imm5_rz:4;
+}
+
+# multi-register access Part
+push16list_8: r11              is i16_bit_0003 = 0x8 & r11                {push(r11);}
+push16list_7: r10,push16list_8 is i16_bit_0003 > 0x7 & r10 & push16list_8 {push(r10);}
+push16list_7: r10              is i16_bit_0003 = 0x7 & r10                {push(r10);}
+push16list_6: r9,push16list_7  is i16_bit_0003 > 0x6 & r9 & push16list_7  {push(r9);}
+push16list_6: r9               is i16_bit_0003 = 0x6 & r9                 {push(r9);}
+push16list_5: r8,push16list_6  is i16_bit_0003 > 0x5 & r8 & push16list_6  {push(r8);}
+push16list_5: r8               is i16_bit_0003 = 0x5 & r8                 {push(r8);}
+push16list_4: r7,push16list_5  is i16_bit_0003 > 0x4 & r7 & push16list_5  {push(r7);}
+push16list_4: r7               is i16_bit_0003 = 0x4 & r7                 {push(r7);}
+push16list_3: r6,push16list_4  is i16_bit_0003 > 0x3 & r6 & push16list_4  {push(r6);}
+push16list_3: r6               is i16_bit_0003 = 0x3 & r6                 {push(r6);}
+push16list_2: r5,push16list_3  is i16_bit_0003 > 0x2 & r5 & push16list_3  {push(r5);}
+push16list_2: r5               is i16_bit_0003 = 0x2 & r5                 {push(r5);}
+push16list_1: r4,push16list_2  is i16_bit_0003 > 0x1 & r4 & push16list_2  {push(r4);}
+push16list_1: r4               is i16_bit_0003 = 0x1 & r4                 {push(r4);}
+push16list: push16list_1       is i16_bit_0003 > 0x0 & push16list_1       {}
+push16list:                    is i16_bit_0003 = 0x0                      {}
+push16lr:                      is i16_bit_0404 = 0x0                             {}
+push16lr: lr                   is i16_bit_0003 = 0x0 & i16_bit_0404 = 0x1 & lr  {push(lr);}
+push16lr: ,lr                  is i16_bit_0003 > 0x0 & i16_bit_0404 = 0x1 & lr  {push(lr);}
+push16braced: push16list^push16lr is push16list & push16lr             {}
+:push push16braced is i16_optype = 0b00 & i16_4op = 0b0101 & i16_bit_0509 = 0b00110 & push16braced {
+    build push16braced;
+}
+
+pop16list_1:                 is i16_bit_0003 < 0x1                      {}
+pop16list_1: r4              is i16_bit_0003 >= 0x1 & r4                {pop(r4);}
+pop16list_2: pop16list_1     is i16_bit_0003 < 0x2  & pop16list_1       {}
+pop16list_2: pop16list_1,r5  is i16_bit_0003 >= 0x2 & r5 & pop16list_1  {pop(r5);}
+pop16list_3: pop16list_2     is i16_bit_0003 < 0x3  & pop16list_2       {}
+pop16list_3: pop16list_2,r6  is i16_bit_0003 >= 0x3 & r6 & pop16list_2  {pop(r6);}
+pop16list_4: pop16list_3     is i16_bit_0003 < 0x4  & pop16list_3       {}
+pop16list_4: pop16list_3,r7  is i16_bit_0003 >= 0x4 & r7 & pop16list_3  {pop(r7);}
+pop16list_5: pop16list_4     is i16_bit_0003 < 0x5  & pop16list_4       {}
+pop16list_5: pop16list_4,r8  is i16_bit_0003 >= 0x5 & r8 & pop16list_4  {pop(r8);}
+pop16list_6: pop16list_5     is i16_bit_0003 < 0x6  & pop16list_5       {}
+pop16list_6: pop16list_5,r9  is i16_bit_0003 >= 0x6 & r9 & pop16list_5  {pop(r9);}
+pop16list_7: pop16list_6     is i16_bit_0003 < 0x7  & pop16list_6       {}
+pop16list_7: pop16list_6,r10 is i16_bit_0003 >= 0x7 & r10 & pop16list_6 {pop(r10);}
+pop16list: pop16list_7       is i16_bit_0003 < 0x8  & pop16list_7       {}
+pop16list: pop16list_7,r11   is i16_bit_0003 = 0x8  & r11 & pop16list_7 {pop(r11);}
+pop16lr:                     is i16_bit_0404 = 0x0                             {}
+pop16lr: lr                  is i16_bit_0404 = 0x1 & i16_bit_0003 = 0x0 & lr  {pop(lr);}
+pop16lr: ,lr                 is i16_bit_0404 = 0x1 & i16_bit_0003 > 0x0 & lr  {pop(lr);}
+pop16braced: pop16list^pop16lr is pop16lr & pop16list {}
+:pop pop16braced is i16_optype = 0b00 & i16_4op = 0b0101 & i16_bit_0509 = 0b00100 & pop16braced {
+    build pop16braced;
+    local tmp:4 = lr & 0xfffffffe;
+    return [tmp];
+}
+
+:nie is i16_bit_0015 = 0b0001010001100000 {
+    push(epc);
+    push(epsr);
+    psr_ee = 1;
+    psr_ie = 1;
+}
+:nir is i16_bit_0015 = 0b0001010001100001 {
+    pop(epsr);
+    pop(epc);
+    psr = epsr;
+    pc = epc;
+    return[pc];
+}
+:ipush is i16_bit_0015 = 0b0001010001100010 {
+    push(r0);
+    push(r1);
+    push(r2);
+    push(r3);
+    push(r12);
+    push(r13);
+}
+:ipop is i16_bit_0015 = 0b0001010001100011 {
+    pop(r0);
+    pop(r1);
+    pop(r2);
+    pop(r3);
+    pop(r12);
+    pop(r13);
+}

@@ -1,8 +1,0 @@
-with : fp2_op = 0b1101 {
-    #flds replaced fld.32
-    :flds  fp2_imm4_vrz (fp2_r_rx, fp2_imm4_imm_l) is fp2_imm4_sop = 0b00100000 & fp2_imm4_vrz & fp2_r_rx & fp2_imm4_imm_l {stub();}
-    :fldrs fp2_r_vrz, (fp2_r_rx, fp2_r_ry) is fp2_r_sop = 0b00101000000 & fp2_r_vrz & fp2_r_rx & fp2_r_ry {stub();}
-    :fldms fp2_imm4_vry-fp2_imm4_vrz (fp2_r_rx) is fp2_imm4_sop = 0b00110000 & fp2_imm4_vry & fp2_imm4_vrz & fp2_r_rx {stub();}
-    :fsts  fp2_imm4_vrz (fp2_r_rx, fp2_imm4_imm_l) is fp2_imm4_sop = 0b00100100 & fp2_imm4_vrz & fp2_r_rx & fp2_imm4_imm_l {stub();}
-    :fstms fp2_imm4_vry-fp2_imm4_vrz (fp2_r_rx) is fp2_imm4_sop = 0b00110100 & fp2_imm4_vry & fp2_imm4_vrz & fp2_r_rx {stub();}
-}
